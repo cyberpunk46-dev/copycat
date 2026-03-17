@@ -1,1 +1,175 @@
+/* Importing the same font from the previous design */
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
 
+        /* Using the same color variables for consistency */
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #343a40;
+            --heading-color: #0056b3;
+            --border-color: #dee2e6;
+            --card-bg-color: #ffffff;
+            --link-hover-color: #007bff;
+        }
+
+        /* --- General Body and Typography Styles --- */
+        body {
+            font-family: 'Lato', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Header and Navigation --- */
+        header {
+            background-color: var(--card-bg-color);
+            border-bottom: 2px solid var(--border-color);
+            padding: 0 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 70px;
+        }
+
+        nav h2 {
+            color: var(--heading-color);
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .nav-opt {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-opt li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 700;
+            padding: 10px 15px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-opt li a:hover {
+            color: var(--heading-color);
+        }
+
+        /* --- Main Content: Semester Grid --- */
+        main {
+            padding: 40px 0;
+        }
+        
+        .semester-grid {
+            display: grid;
+            /* Creates a responsive grid that fits as many cards as possible */
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        
+        /* --- Semester Card Styling --- */
+        .semester-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .semester-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .semester-card h3 {
+            color: var(--heading-color);
+            font-size: 1.7rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+        
+        .subject-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .subject-list li {
+            margin-bottom: 12px;
+        }
+
+        .subject-list li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .subject-list li a:hover {
+            color: var(--link-hover-color);
+            font-weight: 700;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 2px solid var(--border-color);
+            color: #6c757d;
+        }
+        
+        /* --- Code Styling --- */
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 20px 0;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            background-color: #f1f3f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+        
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                height: auto;
+                padding: 15px 0;
+            }
+
+            nav h2 {
+                margin-bottom: 10px;
+            }
+
+            .semester-grid {
+                grid-template-columns: 1fr; /* Stack cards on top of each other */
+            }
+        }
