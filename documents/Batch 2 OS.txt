@@ -1,0 +1,1214 @@
+================================================================
+O.S. PRACTICAL EXAM KEY ANSWERS - BATCH 2
+================================================================
+
+1.) Write a C program to implement UNIX system calls and file management.
+
+Ans:-
+
+AIM
+To write a C program to demonstrate UNIX system calls for file management
+(create, write, read, and close a file).
+
+ALGORITHM
+1. Create a file using open() system call.
+2. Write data into the file using write().
+3. Close the file.
+4. Reopen the file in read mode.
+5. Read and display the file contents using read().
+
+PROGRAM
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+
+int main() {
+    int fd;
+    char write_msg[] = "Hello, this is UNIX file handling program\n";
+    char read_msg[100];
+
+    // Create file
+    fd = open("file.txt", O_CREAT | O_WRONLY, 0644);
+    if(fd == -1) {
+        printf("File creation failed\n");
+        return 1;
+    }
+
+    // Write into file
+    write(fd, write_msg, strlen(write_msg));
+
+    // Close file
+    close(fd);
+
+    // Reopen file in read mode
+    fd = open("file.txt", O_RDONLY);
+    if(fd == -1) {
+        printf("File open failed\n");
+        return 1;
+    }
+
+    // Read file content
+    int n = read(fd, read_msg, sizeof(read_msg));
+
+    // Null terminate string
+    read_msg[n] = '\0';
+
+    printf("File Content:\n%s", read_msg);
+
+    close(fd);
+
+    return 0;
+}
+
+OUTPUT
+File Content:
+Hello, this is UNIX file handling program
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+2.) Write a C program to simulate two level file organization technique.
+
+Ans:-
+
+AIM
+To write a C program to simulate two-level file organization technique.
+
+ALGORITHM
+1. Create a structure for user directories and files.
+2. Read number of users.
+3. For each user, read file names.
+4. Store files under respective user directory.
+5. Display all users and their files.
+
+PROGRAM
+
+#include <stdio.h>
+#include <string.h>
+
+struct user {
+    char name[20];
+    char files[10][20];
+    int file_count;
+};
+
+int main() {
+    int n, i, j;
+
+    printf("Enter number of users: ");
+    scanf("%d", &n);
+
+    struct user u[n];
+
+    // Input users and their files
+    for(i = 0; i < n; i++) {
+        printf("\nEnter user name: ");
+        scanf("%s", u[i].name);
+
+        printf("Enter number of files for %s: ", u[i].name);
+        scanf("%d", &u[i].file_count);
+
+        for(j = 0; j < u[i].file_count; j++) {
+            printf("Enter file %d: ", j + 1);
+            scanf("%s", u[i].files[j]);
+        }
+    }
+
+    // Display directory structure
+    printf("\n--- Two Level Directory Structure ---\n");
+
+    for(i = 0; i < n; i++) {
+        printf("\nUser: %s\n", u[i].name);
+
+        for(j = 0; j < u[i].file_count; j++) {
+            printf("  %s\n", u[i].files[j]);
+        }
+    }
+
+    return 0;
+}
+
+OUTPUT
+Enter number of users: 2
+
+Enter user name: Ravi
+Enter number of files for Ravi: 2
+Enter file 1: a.txt
+Enter file 2: b.txt
+
+Enter user name: Arun
+Enter number of files for Arun: 3
+Enter file 1: a.txt
+Enter file 2: b.txt
+Enter file 3: c.txt
+
+--- Two Level Directory Structure ---
+
+User: Ravi
+  a.txt
+  b.txt
+
+User: Arun
+  a.txt
+  b.txt
+  c.txt
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+3.) i. Write a C program to implement the Process system calls.
+    ii. Write a C program for I/O system calls.
+
+Ans:-
+
+i.) AIM
+To write a C program to demonstrate process system calls using
+fork(), getpid(), and getppid().
+
+ALGORITHM
+1. Create a process using fork().
+2. Identify parent and child processes.
+3. Use getpid() to get process ID.
+4. Use getppid() to get parent process ID.
+5. Display process details.
+
+PROGRAM
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    int pid;
+
+    pid = fork();
+
+    if(pid > 0) {
+        // Parent process
+        printf("Parent Process\n");
+        printf("PID = %d\n", getpid());
+        printf("Child PID = %d\n", pid);
+    }
+    else if(pid == 0) {
+        // Child process
+        printf("\nChild Process\n");
+        printf("PID = %d\n", getpid());
+        printf("Parent PID = %d\n", getppid());
+    }
+    else {
+        printf("Fork failed\n");
+    }
+
+    return 0;
+}
+
+OUTPUT
+Parent Process
+PID = 10
+Child PID = 16
+
+Child Process
+PID = 16
+Parent PID = 10
+
+RESULT
+The program was successfully executed and verified.
+
+---
+
+ii.) AIM
+To write a C program to demonstrate I/O system calls (open, read, write, close).
+
+ALGORITHM
+1. Open a file using open() system call.
+2. Write data into file using write().
+3. Close the file.
+4. Reopen file in read mode.
+5. Read and display file content.
+
+PROGRAM
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+
+int main() {
+    int fd;
+    char write_msg[] = "Operating System I/O System Call Demo\n";
+    char read_msg[100];
+
+    // Open file in write mode
+    fd = open("demo.txt", O_CREAT | O_WRONLY, 0644);
+
+    if(fd == -1) {
+        printf("File open error\n");
+        return 1;
+    }
+
+    write(fd, write_msg, strlen(write_msg));
+    close(fd);
+
+    // Open file in read mode
+    fd = open("demo.txt", O_RDONLY);
+
+    int n = read(fd, read_msg, sizeof(read_msg));
+    read_msg[n] = '\0';
+
+    printf("File Content:\n%s", read_msg);
+
+    close(fd);
+
+    return 0;
+}
+
+OUTPUT
+File Content:
+Operating System I/O System Call Demo
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+4.) Write a C program to implement first fit, best fit algorithm for memory management.
+
+Ans:-
+
+AIM
+To write a C program to implement First Fit and Best Fit memory allocation algorithms.
+
+ALGORITHM
+1. Read number of memory blocks and their sizes.
+2. Read number of processes and their sizes.
+3. Apply First Fit: allocate first suitable block.
+4. Apply Best Fit: allocate smallest suitable block.
+5. Display allocation results for both methods.
+
+PROGRAM
+
+#include <stdio.h>
+
+void firstFit(int block[], int m, int process[], int n) {
+    int alloc[n];
+
+    for(int i = 0; i < n; i++)
+        alloc[i] = -1;
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(block[j] >= process[i]) {
+                alloc[i] = j;
+                block[j] -= process[i];
+                break;
+            }
+        }
+    }
+
+    printf("\nFirst Fit Allocation:\n");
+    printf("Process\tSize\tBlock\n");
+
+    for(int i = 0; i < n; i++) {
+        printf("%d\t%d\t", i+1, process[i]);
+        if(alloc[i] != -1)
+            printf("%d\n", alloc[i]+1);
+        else
+            printf("Not Allocated\n");
+    }
+}
+
+void bestFit(int block[], int m, int process[], int n) {
+    int alloc[n];
+
+    for(int i = 0; i < n; i++)
+        alloc[i] = -1;
+
+    for(int i = 0; i < n; i++) {
+        int bestIdx = -1;
+
+        for(int j = 0; j < m; j++) {
+            if(block[j] >= process[i]) {
+                if(bestIdx == -1 || block[j] < block[bestIdx]) {
+                    bestIdx = j;
+                }
+            }
+        }
+
+        if(bestIdx != -1) {
+            alloc[i] = bestIdx;
+            block[bestIdx] -= process[i];
+        }
+    }
+
+    printf("\nBest Fit Allocation:\n");
+    printf("Process\tSize\tBlock\n");
+
+    for(int i = 0; i < n; i++) {
+        printf("%d\t%d\t", i+1, process[i]);
+        if(alloc[i] != -1)
+            printf("%d\n", alloc[i]+1);
+        else
+            printf("Not Allocated\n");
+    }
+}
+
+int main() {
+    int m, n;
+
+    printf("Enter number of blocks: ");
+    scanf("%d", &m);
+
+    int block1[m], block2[m];
+
+    printf("Enter block sizes:\n");
+    for(int i = 0; i < m; i++) {
+        scanf("%d", &block1[i]);
+        block2[i] = block1[i];
+    }
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int process[n];
+
+    printf("Enter process sizes:\n");
+    for(int i = 0; i < n; i++) {
+        scanf("%d", &process[i]);
+    }
+
+    firstFit(block1, m, process, n);
+    bestFit(block2, m, process, n);
+
+    return 0;
+}
+
+OUTPUT
+Enter number of blocks: 3
+Enter block sizes:
+100 500 200
+Enter number of processes: 4
+Enter process sizes:
+212 417 112 426
+
+First Fit Allocation:
+Process  Size    Block
+1        212     2
+2        417     Not Allocated
+3        112     2
+4        426     Not Allocated
+
+Best Fit Allocation:
+Process  Size    Block
+1        212     2
+2        417     Not Allocated
+3        112     3
+4        426     Not Allocated
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+5.) Execute the basics of UNIX commands for directory and file related commands.
+
+Ans:-
+
+AIM
+To execute and understand basic UNIX commands for file and directory management.
+
+ALGORITHM
+1. Create a directory using mkdir() system call.
+2. Create a file inside the directory using open().
+3. Write data into the file using write().
+4. Read data using read() system call.
+5. Display file content and close file.
+
+PROGRAM
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <string.h>
+
+int main() {
+    int fd;
+    char write_msg[] = "UNIX File and Directory System Call Demo\n";
+    char read_msg[100];
+
+    // Create directory
+    if(mkdir("OS_Lab", 0777) == -1) {
+        printf("Directory may already exist\n");
+    } else {
+        printf("Directory created successfully\n");
+    }
+
+    // Change into directory
+    chdir("OS_Lab");
+
+    // Create file
+    fd = open("file.txt", O_CREAT | O_WRONLY, 0644);
+
+    if(fd == -1) {
+        printf("File creation failed\n");
+        return 1;
+    }
+
+    // Write into file
+    write(fd, write_msg, strlen(write_msg));
+    close(fd);
+
+    // Read file
+    fd = open("file.txt", O_RDONLY);
+
+    int n = read(fd, read_msg, sizeof(read_msg));
+    read_msg[n] = '\0';
+
+    printf("\nFile Content:\n%s", read_msg);
+
+    close(fd);
+
+    return 0;
+}
+
+OUTPUT
+Directory created successfully
+
+File Content:
+UNIX File and Directory System Call Demo
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+6.) Write a program using the wait, exit, stat system calls of UNIX operating system.
+
+Ans:-
+
+AIM
+To write a C program demonstrating wait(), exit(), and stat() system calls in UNIX.
+
+ALGORITHM
+1. Create a child process using fork().
+2. Child process executes and terminates using exit().
+3. Parent process waits for child using wait().
+4. Use stat() to get file information.
+5. Display process and file details.
+
+PROGRAM
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <stdlib.h>
+
+int main() {
+    pid_t pid;
+    struct stat st;
+
+    pid = fork();
+
+    if(pid == 0) {
+        printf("Child PID: %d\n", getpid());
+        exit(0);
+    } else {
+        wait(NULL);
+
+        printf("Parent PID: %d\n", getpid());
+
+        stat("file.txt", &st);
+        printf("File size: %ld bytes\n", st.st_size);
+    }
+
+    return 0;
+}
+
+OUTPUT
+Child PID: 16
+Parent PID: 10
+File size: 140726832165712 bytes
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+7.) Write a C program for implementation of process management using the following
+    system calls of UNIX OS: fork(), exec(), close(), getpid().
+
+Ans:-
+
+AIM
+To implement process management using UNIX system calls.
+
+ALGORITHM
+1. Create a process using fork().
+2. Identify parent and child using getpid().
+3. Child process replaces itself using exec().
+4. Parent process closes standard output using close().
+5. Display process execution details.
+
+PROGRAM
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    pid_t pid;
+
+    printf("Parent PID: %d\n", getpid());
+
+    pid = fork();
+
+    if(pid == 0) {
+        printf("Child PID: %d\n", getpid());
+        execlp("ls", "ls", NULL);
+    } else {
+        close(1);
+    }
+
+    return 0;
+}
+
+OUTPUT
+Parent PID: 10
+Child PID: 16
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+8.) Execute the various commands operated in vi editor in UNIX.
+
+Ans:-
+
+AIM
+To perform basic file operations using VI editor in UNIX.
+
+ALGORITHM
+1. Open file using vi filename.
+2. Enter insert mode using i, a, or o.
+3. Add or edit content.
+4. Save or exit using :w, :q, :wq.
+5. Perform edit operations like delete, copy, paste.
+
+PROGRAM
+
+#include <stdio.h>
+
+int main() {
+    int a, b, sum;
+
+    printf("Enter two numbers: ");
+    scanf("%d %d", &a, &b);
+
+    sum = a + b;
+
+    printf("Sum = %d\n", sum);
+
+    return 0;
+}
+
+OUTPUT
+Enter two numbers: 5 7
+Sum = 12
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+9.) Write a C program to implement any file allocation technique
+    (Linked, Indexed or Contiguous).
+
+Ans:-
+
+AIM
+To write a C program to implement Indexed File Allocation technique.
+
+ALGORITHM
+1. Read number of blocks and file size.
+2. Read index block number.
+3. Read data blocks for the file.
+4. Store all block addresses in an index table.
+5. Display indexed allocation structure.
+
+PROGRAM
+
+#include <stdio.h>
+
+int main() {
+    int n, i, index;
+
+    printf("Enter number of blocks: ");
+    scanf("%d", &n);
+
+    int block[n];
+
+    printf("Enter index block: ");
+    scanf("%d", &index);
+
+    printf("Enter data blocks:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d", &block[i]);
+    }
+
+    printf("\nIndexed File Allocation:\n");
+    printf("Index Block: %d\n", index);
+    printf("Allocated Blocks: ");
+
+    for(i = 0; i < n; i++) {
+        printf("%d ", block[i]);
+    }
+
+    printf("\n");
+
+    return 0;
+}
+
+OUTPUT
+Enter number of blocks: 4
+Enter index block: 9
+Enter data blocks:
+3 5 7 11
+
+Indexed File Allocation:
+Index Block: 9
+Allocated Blocks: 3 5 7 11
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+10.) Install any one of the operating system (Windows/Linux).
+
+Ans:-
+
+AIM
+To install Linux (Ubuntu) operating system on a system using VirtualBox/bootable USB.
+
+ALGORITHM
+1. Download Ubuntu ISO file from official website.
+2. Create a bootable USB or set up VirtualBox VM.
+3. Boot system using installation media.
+4. Select language, partition disk, and install OS.
+5. Complete installation and restart system.
+
+PROGRAM (PROCEDURE):-
+
+Step 1: Download OS
+  - Download Ubuntu ISO from official site.
+
+Step 2: Create Bootable Media / VM
+  - Use Rufus (USB) OR
+  - Create new Virtual Machine in VirtualBox
+
+Step 3: Boot System
+  - Insert USB OR start VM
+  - Select "Install Ubuntu"
+
+Step 4: Installation Setup
+  - Choose language
+  - Select keyboard layout
+  - Choose "Normal Installation"
+  - Select disk (Erase disk / manual partition)
+
+Step 5: User Setup
+  - Enter username
+  - Set password
+  - Wait for installation to complete
+
+Step 6: Finish Installation
+  - Click restart
+  - Remove installation media
+  - Login to Ubuntu
+
+OUTPUT
+Ubuntu Desktop successfully installed and running.
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+11th QUESTION IS DELETED
+12TH QUESTION IS DELETED
+
+----------------------------------------------------------------
+
+13.) Write a program to simulate UNIX commands CP and ls.
+
+Ans:-
+
+AIM
+To write a C program to simulate UNIX commands cp (copy file) and ls (list directory contents).
+
+ALGORITHM
+1. Accept choice from user (cp or ls).
+2. If cp, read source and destination file names.
+3. Copy contents from source file to destination file.
+4. If ls, display list of files in current directory.
+5. Execute using system calls and display output.
+
+PROGRAM
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <dirent.h>
+
+void copyFile() {
+    FILE *fp1, *fp2;
+    char ch;
+    char source[30], dest[30];
+
+    printf("Enter source file: ");
+    scanf("%s", source);
+
+    printf("Enter destination file: ");
+    scanf("%s", dest);
+
+    fp1 = fopen(source, "r");
+    if(fp1 == NULL) {
+        printf("Source file not found\n");
+        return;
+    }
+
+    fp2 = fopen(dest, "w");
+
+    while((ch = fgetc(fp1)) != EOF) {
+        fputc(ch, fp2);
+    }
+
+    printf("File copied successfully\n");
+
+    fclose(fp1);
+    fclose(fp2);
+}
+
+void listFiles() {
+    struct dirent *d;
+    DIR *dir = opendir(".");
+
+    if(dir == NULL) {
+        printf("Directory not found\n");
+        return;
+    }
+
+    printf("\nFiles in current directory:\n");
+
+    while((d = readdir(dir)) != NULL) {
+        printf("%s\n", d->d_name);
+    }
+
+    closedir(dir);
+}
+
+int main() {
+    int choice;
+
+    printf("1. cp (copy file)\n");
+    printf("2. ls (list files)\n");
+    printf("Enter choice: ");
+    scanf("%d", &choice);
+
+    switch(choice) {
+        case 1:
+            copyFile();
+            break;
+
+        case 2:
+            listFiles();
+            break;
+
+        default:
+            printf("Invalid choice\n");
+    }
+
+    return 0;
+}
+
+OUTPUT
+
+CASE:1 - CP
+Enter source file: a.txt
+Enter destination file: b.txt
+File copied successfully
+
+CASE:2 - LS
+Files in current directory:
+a.txt
+b.txt
+cp_ls.c
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+14.) i. Write a shell program to generate Fibonacci series.
+     ii. Write a shell program to compare the two strings.
+
+Ans:-
+
+i.) AIM
+To write a shell program to generate Fibonacci series.
+
+ALGORITHM
+1. Read number of terms from user.
+2. Initialize first two terms as 0 and 1.
+3. Print first two terms.
+4. Use loop to generate next terms by adding previous two.
+5. Display Fibonacci series.
+
+PROGRAM
+
+echo "Enter number of terms:"
+read n
+
+a=0
+b=1
+
+echo "Fibonacci Series:"
+
+echo "$a"
+echo "$b"
+
+i=2
+
+while [ $i -lt $n ]
+do
+    c=$((a + b))
+    echo "$c"
+    a=$b
+    b=$c
+    i=$((i + 1))
+done
+
+OUTPUT
+Enter number of terms:
+5
+Fibonacci Series:
+0
+1
+1
+2
+3
+
+RESULT
+The program was successfully executed and verified.
+
+---
+
+ii.) AIM
+To write a shell program to compare two strings.
+
+ALGORITHM
+1. Read two strings from user.
+2. Compare both strings using = operator.
+3. If equal, display "Strings are equal".
+4. Else display "Strings are not equal".
+5. End program.
+
+PROGRAM
+
+echo "Enter first string:"
+read str1
+
+echo "Enter second string:"
+read str2
+
+if [ "$str1" = "$str2" ]
+then
+    echo "Strings are equal"
+else
+    echo "Strings are not equal"
+fi
+
+OUTPUT
+Enter first string:
+hello
+Enter second string:
+hello
+Strings are equal
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+15.) Write a C program to implement the Round Robin (RR) CPU scheduling.
+
+Ans:-
+
+AIM
+To write a C program to implement Round Robin CPU scheduling algorithm.
+
+ALGORITHM
+1. Read number of processes, burst times, and time quantum.
+2. Initialize remaining burst time for each process.
+3. Execute processes in cyclic order using time quantum.
+4. Update remaining time and calculate waiting time.
+5. Compute and display waiting and turnaround times.
+
+PROGRAM
+
+#include <stdio.h>
+
+int main() {
+    int n, i, tq, time = 0, remain;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int bt[n], rt[n], wt[n], tat[n];
+
+    printf("Enter burst times:\n");
+    for(i = 0; i < n; i++) {
+        scanf("%d", &bt[i]);
+        rt[i] = bt[i];
+        wt[i] = 0;
+    }
+
+    printf("Enter time quantum: ");
+    scanf("%d", &tq);
+
+    remain = n;
+
+    while(remain > 0) {
+        for(i = 0; i < n; i++) {
+            if(rt[i] > 0) {
+                if(rt[i] <= tq) {
+                    time += rt[i];
+                    rt[i] = 0;
+                    remain--;
+                    wt[i] = time - bt[i];
+                } else {
+                    time += tq;
+                    rt[i] -= tq;
+                }
+            }
+        }
+    }
+
+    float total_wt = 0, total_tat = 0;
+
+    printf("\nProcess\tBT\tWT\tTAT\n");
+
+    for(i = 0; i < n; i++) {
+        tat[i] = bt[i] + wt[i];
+        total_wt += wt[i];
+        total_tat += tat[i];
+
+        printf("P%d\t%d\t%d\t%d\n", i+1, bt[i], wt[i], tat[i]);
+    }
+
+    printf("\nAverage Waiting Time = %.2f", total_wt / n);
+    printf("\nAverage Turnaround Time = %.2f\n", total_tat / n);
+
+    return 0;
+}
+
+OUTPUT
+Enter number of processes: 3
+Enter burst times:
+5 4 2
+Enter time quantum: 2
+
+Process  BT   WT   TAT
+P1       5    6    11
+P2       4    6    10
+P3       2    4    6
+
+Average Waiting Time = 5.33
+Average Turnaround Time = 9.00
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+16.) Write a C program to implement hierarchy level directory structure.
+
+Ans:-
+
+AIM
+To write a C program to implement a hierarchical (tree-structured) directory system.
+
+ALGORITHM
+1. Define a structure for directory with subdirectories and files.
+2. Read parent directory name.
+3. Add subdirectories under parent directory.
+4. Add files under each subdirectory.
+5. Display complete hierarchical structure.
+
+PROGRAM
+
+#include <stdio.h>
+#include <string.h>
+
+struct directory {
+    char name[20];
+    char files[5][20];
+    int file_count;
+};
+
+int main() {
+    int n, i, j;
+
+    printf("Enter number of subdirectories: ");
+    scanf("%d", &n);
+
+    struct directory d[n];
+
+    printf("\nEnter Parent Directory: OS_Lab\n");
+
+    for(i = 0; i < n; i++) {
+        printf("\nEnter subdirectory name: ");
+        scanf("%s", d[i].name);
+
+        printf("Enter number of files in %s: ", d[i].name);
+        scanf("%d", &d[i].file_count);
+
+        for(j = 0; j < d[i].file_count; j++) {
+            printf("Enter file %d: ", j + 1);
+            scanf("%s", d[i].files[j]);
+        }
+    }
+
+    printf("\n--- Hierarchical Directory Structure ---\n");
+    printf("OS_Lab\n");
+
+    for(i = 0; i < n; i++) {
+        printf("  |-- %s\n", d[i].name);
+
+        for(j = 0; j < d[i].file_count; j++) {
+            printf("      |-- %s\n", d[i].files[j]);
+        }
+    }
+
+    return 0;
+}
+
+OUTPUT
+Enter number of subdirectories: 2
+
+Enter Parent Directory: OS_Lab
+
+Enter subdirectory name: user1
+Enter number of files in user1: 2
+Enter file 1: a.txt
+Enter file 2: b.txt
+
+Enter subdirectory name: user2
+Enter number of files in user2: 1
+Enter file 1: c.txt
+
+--- Hierarchical Directory Structure ---
+OS_Lab
+  |-- user1
+      |-- a.txt
+      |-- b.txt
+  |-- user2
+      |-- c.txt
+
+RESULT
+The program was successfully executed and verified.
+
+----------------------------------------------------------------
+
+17TH QUESTION IS DELETED
+18TH QUESTION IS DELETED
+19TH QUESTION IS DELETED
+
+----------------------------------------------------------------
+
+20.) Write a C program to simulate Paging technique for memory management.
+
+Ans:-
+
+AIM
+To write a C program to simulate paging technique for memory management.
+
+ALGORITHM
+1. Read size of logical memory, page size, and physical memory.
+2. Calculate number of pages and frames.
+3. Read page table mapping (page to frame).
+4. Accept logical address (page number + offset).
+5. Convert to physical address and display result.
+
+PROGRAM
+
+#include <stdio.h>
+
+int main() {
+    int logical_mem, physical_mem, page_size;
+    int pages, frames;
+
+    printf("Enter logical memory size: ");
+    scanf("%d", &logical_mem);
+
+    printf("Enter physical memory size: ");
+    scanf("%d", &physical_mem);
+
+    printf("Enter page size: ");
+    scanf("%d", &page_size);
+
+    pages = logical_mem / page_size;
+    frames = physical_mem / page_size;
+
+    int page_table[pages];
+
+    printf("\nEnter page table (frame mapping):\n");
+    for(int i = 0; i < pages; i++) {
+        printf("Page %d -> Frame: ", i);
+        scanf("%d", &page_table[i]);
+    }
+
+    int page_no, offset;
+
+    printf("\nEnter logical address (page number & offset):\n");
+    scanf("%d %d", &page_no, &offset);
+
+    if(page_no >= pages || offset >= page_size) {
+        printf("Invalid logical address\n");
+        return 0;
+    }
+
+    int frame_no = page_table[page_no];
+    int physical_address = frame_no * page_size + offset;
+
+    printf("\nPhysical Address = %d\n", physical_address);
+
+    return 0;
+}
+
+OUTPUT
+Enter logical memory size: 16
+Enter physical memory size: 32
+Enter page size: 4
+
+Enter page table (frame mapping):
+Page 0 -> Frame: 2
+Page 1 -> Frame: 1
+Page 2 -> Frame: 3
+Page 3 -> Frame: 0
+
+Enter logical address (page number & offset):
+2 1
+
+Physical Address = 13
+
+RESULT
+The program was successfully executed and verified.
+
+
+===
